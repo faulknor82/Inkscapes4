@@ -8,12 +8,20 @@ public class RightPiece : MonoBehaviour
     public Vector3Int rightPosition { get; private set; }
     public int rightRotationIndex { get; private set; }
 
+    public float stepDelay = 1f;
+    public float lockDelay = 0.5f;
+
+    private float stepTime;
+    private float lockTime;
+
     public void RightInitialize(RightBoard rightBoard, Vector3Int rightPosition, TetrominoData data)
     {
         this.rightBoard = rightBoard;
         this.rightPosition = rightPosition;
         this.data = data;
         this.rightRotationIndex = 0;
+        this.stepTime = Time.time + this.stepDelay;
+        this.lockTime = 0f;
 
         if (this.cells == null)
         {
@@ -29,6 +37,8 @@ public class RightPiece : MonoBehaviour
     private void Update()
     {
         this.rightBoard.RightClear(this);
+
+        this.lockTime += Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -54,7 +64,29 @@ public class RightPiece : MonoBehaviour
             RightHardDrop();
         }
 
+        if (Time.time >= this.stepTime)
+        {
+            Step();
+        }
+
         this.rightBoard.RightSet(this);
+    }
+
+    private void Step()
+    {
+        this.stepTime = Time.time + this.stepDelay;
+        Move(Vector2Int.down);
+
+        if (this.lockTime >= this.lockDelay)
+        {
+            Lock();
+        }
+    }
+
+    private void Lock()
+    {
+        this.rightBoard.RightSet(this);
+        this.rightBoard.RightSpawnPiece();
     }
 
     private void RightHardDrop()
@@ -63,6 +95,8 @@ public class RightPiece : MonoBehaviour
         {
             continue;
         }
+
+        Lock();
     }
 
     private bool Move(Vector2Int translation)
@@ -76,6 +110,7 @@ public class RightPiece : MonoBehaviour
         if (valid)
         {
             this.rightPosition = newRightPosition;
+            this.lockTime = 0f;
         }
 
         return valid;

@@ -8,12 +8,20 @@ public class LeftPiece : MonoBehaviour
     public Vector3Int leftPosition { get; private set; }
     public int leftRotationIndex { get; private set; }
 
+    public float stepDelay = 1f;
+    public float lockDelay = 0.5f;
+
+    private float stepTime;
+    private float lockTime;
+
     public void LeftInitialize(LeftBoard leftBoard, Vector3Int leftPosition, TetrominoData data)
     {
         this.leftBoard = leftBoard;
         this.leftPosition = leftPosition;
         this.data = data;
         this.leftRotationIndex = 0;
+        this.stepTime = Time.time + this.stepDelay;
+        this.lockTime = 0f;
 
         if(this.cells == null)
         {
@@ -29,6 +37,8 @@ public class LeftPiece : MonoBehaviour
     private void Update()
     {
         this.leftBoard.LeftClear(this);
+
+        this.lockTime += Time.deltaTime;
 
         if(Input.GetKeyDown(KeyCode.W))
         {
@@ -53,7 +63,29 @@ public class LeftPiece : MonoBehaviour
             LeftHardDrop();
         }
 
+        if(Time.time >= this.stepTime)
+        {
+            Step();
+        }
+
         this.leftBoard.LeftSet(this);
+    }
+
+    private void Step()
+    {
+        this.stepTime = Time.time + this.stepDelay;
+        Move(Vector2Int.down);
+
+        if(this.lockTime >= this.lockDelay)
+        {
+            Lock();
+        }
+    }
+
+    private void Lock()
+    {
+        this.leftBoard.LeftSet(this);
+        this.leftBoard.LeftSpawnPiece();
     }
 
     private void LeftHardDrop()
@@ -62,6 +94,8 @@ public class LeftPiece : MonoBehaviour
         {
             continue;
         }
+
+        Lock();
     }
 
     private bool Move(Vector2Int translation)
@@ -75,6 +109,7 @@ public class LeftPiece : MonoBehaviour
         if(valid)
         {
             this.leftPosition = newLeftPosition;
+            this.lockTime = 0f;
         }
 
         return valid;
