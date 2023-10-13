@@ -86,6 +86,7 @@ public class RightPiece : MonoBehaviour
     private void Lock()
     {
         this.rightBoard.RightSet(this);
+        this.rightBoard.ClearRightLines();
         this.rightBoard.RightSpawnPiece();
     }
 

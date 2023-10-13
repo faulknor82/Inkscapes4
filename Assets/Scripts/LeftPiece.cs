@@ -85,6 +85,7 @@ public class LeftPiece : MonoBehaviour
     private void Lock()
     {
         this.leftBoard.LeftSet(this);
+        this.leftBoard.ClearLeftLines();
         this.leftBoard.LeftSpawnPiece();
     }
 
