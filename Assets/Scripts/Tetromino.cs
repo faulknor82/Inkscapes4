@@ -18,9 +18,11 @@ public struct TetrominoData
     public Tetromino tetromino;
     public Tile tile;
     public Vector2Int[] cells { get; private set; } // remove get and set if want to create custom shapes
+    public Vector2Int[,] wallKicks { get; private set; }
 
     public void Initialize()
     {
         this.cells = Data.Cells[this.tetromino];
+        this.wallKicks = Data.WallKicks[this.tetromino];
     }
 }
