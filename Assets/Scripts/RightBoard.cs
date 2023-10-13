@@ -9,6 +9,10 @@ public class RightBoard : MonoBehaviour
     public Vector3Int spawnPosition;
     public Vector2Int rightBoardSize = new Vector2Int(10, 20);
 
+    public GameObject rightBoardPanel;
+
+    private bool IsRightBoardGameOver = false;
+
     public RectInt Bounds
     {
         get
@@ -38,8 +42,25 @@ public class RightBoard : MonoBehaviour
         int random = Random.Range(0, this.tetrominoes.Length);
         TetrominoData data = this.tetrominoes[random];
 
-        this.rightActivePiece.RightInitialize(this, spawnPosition, data);
-        RightSet(this.rightActivePiece);
+        if (!IsRightBoardGameOver)
+        {
+            this.rightActivePiece.RightInitialize(this, spawnPosition, data);
+        }
+        if (IsValidPosition(this.rightActivePiece, this.spawnPosition))
+        {
+            RightSet(this.rightActivePiece);
+        } else
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        this.tilemap.ClearAllTiles();
+        rightBoardPanel.SetActive(true);
+        
+        IsRightBoardGameOver = true;
     }
 
     public void RightSet(RightPiece rightPiece)

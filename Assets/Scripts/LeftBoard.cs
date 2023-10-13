@@ -9,6 +9,10 @@ public class LeftBoard : MonoBehaviour
     public Vector3Int spawnPosition;
     public Vector2Int leftBoardSize = new Vector2Int(10, 20);
 
+    public GameObject leftBoardPanel;
+
+    public bool IsLeftBoardGameOver = false;
+
     public RectInt Bounds
     {
         get
@@ -33,13 +37,34 @@ public class LeftBoard : MonoBehaviour
         LeftSpawnPiece();
     }
 
+    private void GameOver()
+    {
+        this.tilemap.ClearAllTiles();
+        leftBoardPanel.SetActive(true);
+
+        IsLeftBoardGameOver = true;
+    }
+
     public void LeftSpawnPiece()
     {
         int random = Random.Range(0, this.tetrominoes.Length);
         TetrominoData data = this.tetrominoes[random];
 
-        this.leftActivePiece.LeftInitialize(this, spawnPosition, data);
-        LeftSet(this.leftActivePiece);
+        if (!IsLeftBoardGameOver)
+        {
+            this.leftActivePiece.LeftInitialize(this, spawnPosition, data);
+        } else
+        {
+            Destroy(leftActivePiece);
+        }
+
+        if (IsValidPosition(this.leftActivePiece, this.spawnPosition))
+        {
+            LeftSet(this.leftActivePiece);
+        } else
+        {
+            GameOver();
+        }
     }
 
     public void LeftSet(LeftPiece leftPiece)

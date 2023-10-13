@@ -9,7 +9,7 @@ using UnityEngine;
     J,
     L,
     S,
-    Z
+    Z,
 }
 
 [System.Serializable]
@@ -17,7 +17,7 @@ public struct TetrominoData
 {
     public Tetromino tetromino;
     public Tile tile;
-    public Vector2Int[] cells { get; private set; } // remove get and set if want to create custom shapes
+    public Vector2Int[] cells;
     public Vector2Int[,] wallKicks { get; private set; }
 
     public void Initialize()
