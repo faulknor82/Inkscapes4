@@ -19,6 +19,10 @@ public class LeftPiece : MonoBehaviour
 
     public GameObject leftBoard2;
 
+    public AudioSource leftPieceMoving;
+
+    public AudioSource pieceAtBottom;
+
     private void Start()
     {
         leftBoard = leftBoard2.GetComponent<LeftBoard>();
@@ -104,6 +108,7 @@ public class LeftPiece : MonoBehaviour
         this.leftBoard.ClearLeftLines();
         this.leftBoard.LeftSpawnPiece();
         leftBoard.totalScore += 10;
+        pieceAtBottom.Play();
     }
 
     private void LeftHardDrop()
@@ -128,6 +133,10 @@ public class LeftPiece : MonoBehaviour
         {
             this.leftPosition = newLeftPosition;
             this.lockTime = 0f;
+            if (!leftBoard.IsLeftBoardGameOver)
+            {
+                leftPieceMoving.Play();
+            }
         }
 
         return valid;

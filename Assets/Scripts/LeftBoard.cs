@@ -10,12 +10,18 @@ public class LeftBoard : MonoBehaviour
     public Vector2Int leftBoardSize = new Vector2Int(10, 20);
 
     public GameObject leftBoardPanel;
+    public GameObject controlsPanel;
 
     public bool IsLeftBoardGameOver = false;
     public int IsLeftBoardGameOver2 = 0;
 
     public int totalScore;
     public int leftCount;
+
+    public AudioSource oneLineClearAudio;
+    public AudioSource twoLinesClearAudio;
+    public AudioSource threeLinesClearAudio;
+    public AudioSource fourLinesClearAudio;
 
     public RectInt Bounds
     {
@@ -68,6 +74,7 @@ public class LeftBoard : MonoBehaviour
 
         IsLeftBoardGameOver = true;
         IsLeftBoardGameOver2 = 1;
+        controlsPanel.SetActive(false);
     }
 
     public void LeftSet(LeftPiece leftPiece)
@@ -122,15 +129,19 @@ public class LeftBoard : MonoBehaviour
                 if(leftCount == 1)
                 {
                     totalScore += 25;
+                    oneLineClearAudio.Play();
                 } else if(leftCount == 2)
                 {
                     totalScore += 75 - 25;
+                    twoLinesClearAudio.Play();
                 } else if(leftCount == 3)
                 {
                     totalScore += 225 - 75 - 25;
+                    threeLinesClearAudio.Play();
                 } else if(leftCount > 3)
                 {
                     totalScore += 775 - 225 - 75 - 25;
+                    fourLinesClearAudio.Play();
                 }
             } else
             {

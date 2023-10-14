@@ -20,6 +20,10 @@ public class RightPiece : MonoBehaviour
     private LeftBoard leftBoard;
     public GameObject leftBoard2;
 
+    public AudioSource rightPieceMoving;
+
+    public AudioSource pieceAtBottom;
+
     private void Start()
     {
         leftBoard = leftBoard2.GetComponent<LeftBoard>();
@@ -105,6 +109,8 @@ public class RightPiece : MonoBehaviour
         this.rightBoard.RightSpawnPiece();
 
         leftBoard.totalScore += 10;
+
+        pieceAtBottom.Play();
     }
 
     private void RightHardDrop()
@@ -129,6 +135,10 @@ public class RightPiece : MonoBehaviour
         {
             this.rightPosition = newRightPosition;
             this.lockTime = 0f;
+            if (!rightBoard.IsRightBoardGameOver)
+            {
+                rightPieceMoving.Play();
+            }
         }
 
         return valid;
