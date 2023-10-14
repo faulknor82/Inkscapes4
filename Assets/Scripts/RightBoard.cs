@@ -11,7 +11,12 @@ public class RightBoard : MonoBehaviour
 
     public GameObject rightBoardPanel;
 
-    private bool IsRightBoardGameOver = false;
+    public bool IsRightBoardGameOver = false;
+    public int IsRightBoardGameOver2 = 0;
+
+    public int rightCount;
+    private LeftBoard leftBoard;
+    public GameObject leftBoard2;
 
     public RectInt Bounds
     {
@@ -24,6 +29,7 @@ public class RightBoard : MonoBehaviour
 
     private void Awake()
     {
+        IsRightBoardGameOver = false;
         this.tilemap = GetComponentInChildren<Tilemap>();
         this.rightActivePiece = GetComponentInChildren<RightPiece>();
         for (int i = 0; i < this.tetrominoes.Length; i++)
@@ -34,6 +40,7 @@ public class RightBoard : MonoBehaviour
 
     private void Start()
     {
+        leftBoard = leftBoard2.GetComponent<LeftBoard>();
         RightSpawnPiece();
     }
 
@@ -46,6 +53,7 @@ public class RightBoard : MonoBehaviour
         {
             this.rightActivePiece.RightInitialize(this, spawnPosition, data);
         }
+
         if (IsValidPosition(this.rightActivePiece, this.spawnPosition))
         {
             RightSet(this.rightActivePiece);
@@ -61,6 +69,7 @@ public class RightBoard : MonoBehaviour
         rightBoardPanel.SetActive(true);
         
         IsRightBoardGameOver = true;
+        IsRightBoardGameOver2 = 1;
     }
 
     public void RightSet(RightPiece rightPiece)
@@ -110,7 +119,24 @@ public class RightBoard : MonoBehaviour
         {
             if (IsLineFull(row))
             {
+                rightCount++;
                 LineClear(row);
+                if (rightCount == 1)
+                {
+                    leftBoard.totalScore += 25;
+                }
+                else if (rightCount == 2)
+                {
+                    leftBoard.totalScore += 75 - 25;
+                }
+                else if (rightCount == 3)
+                {
+                    leftBoard.totalScore += 225 - 75 - 25;
+                }
+                else if (rightCount > 3)
+                {
+                    leftBoard.totalScore += 775 - 225 - 75 - 25;
+                }
             }
             else
             {

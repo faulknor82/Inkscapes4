@@ -14,6 +14,16 @@ public class RightPiece : MonoBehaviour
     private float stepTime;
     private float lockTime;
 
+    public bool isPaused = false;
+    public int totalScore;
+
+    private LeftBoard leftBoard;
+    public GameObject leftBoard2;
+
+    private void Start()
+    {
+        leftBoard = leftBoard2.GetComponent<LeftBoard>();
+    }
     public void RightInitialize(RightBoard rightBoard, Vector3Int rightPosition, TetrominoData data)
     {
         this.rightBoard = rightBoard;
@@ -36,40 +46,45 @@ public class RightPiece : MonoBehaviour
 
     private void Update()
     {
-        this.rightBoard.RightClear(this);
+        Pause();
 
-        this.lockTime += Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (!isPaused)
         {
-            RightRotate(-1);
-        }
+            this.rightBoard.RightClear(this);
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            Move(Vector2Int.left);
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            Move(Vector2Int.right);
-        }
+            this.lockTime += Time.deltaTime;
 
-        if(Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            Move(Vector2Int.down);
-        }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                RightRotate(-1);
+            }
 
-        if(Input.GetKeyDown(KeyCode.RightShift))
-        {
-            RightHardDrop();
-        }
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                Move(Vector2Int.left);
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                Move(Vector2Int.right);
+            }
 
-        if (Time.time >= this.stepTime)
-        {
-            Step();
-        }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                Move(Vector2Int.down);
+            }
 
-        this.rightBoard.RightSet(this);
+            if (Input.GetKeyDown(KeyCode.RightShift))
+            {
+                RightHardDrop();
+            }
+
+            if (Time.time >= this.stepTime)
+            {
+                Step();
+            }
+
+            this.rightBoard.RightSet(this);
+        }
     }
 
     private void Step()
@@ -88,6 +103,8 @@ public class RightPiece : MonoBehaviour
         this.rightBoard.RightSet(this);
         this.rightBoard.ClearRightLines();
         this.rightBoard.RightSpawnPiece();
+
+        leftBoard.totalScore += 10;
     }
 
     private void RightHardDrop()
@@ -195,6 +212,14 @@ public class RightPiece : MonoBehaviour
         else
         {
             return min + (input - min) % (max - min);
+        }
+    }
+
+    public void Pause()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            isPaused = true;
         }
     }
 }

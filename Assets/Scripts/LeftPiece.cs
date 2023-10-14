@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class LeftPiece : MonoBehaviour
 {
@@ -13,6 +14,15 @@ public class LeftPiece : MonoBehaviour
 
     private float stepTime;
     private float lockTime;
+
+    public bool isPaused = false;
+
+    public GameObject leftBoard2;
+
+    private void Start()
+    {
+        leftBoard = leftBoard2.GetComponent<LeftBoard>();
+    }
 
     public void LeftInitialize(LeftBoard leftBoard, Vector3Int leftPosition, TetrominoData data)
     {
@@ -36,39 +46,45 @@ public class LeftPiece : MonoBehaviour
 
     private void Update()
     {
-        this.leftBoard.LeftClear(this);
+        Pause();
 
-        this.lockTime += Time.deltaTime;
-
-        if(Input.GetKeyDown(KeyCode.W))
+        if (!isPaused)
         {
-            LeftRotate(1);
+            this.leftBoard.LeftClear(this);
+
+            this.lockTime += Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                LeftRotate(1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                Move(Vector2Int.left);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                Move(Vector2Int.right);
+            }
+
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                Move(Vector2Int.down);
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                LeftHardDrop();
+            }
+
+            if (Time.time >= this.stepTime)
+            {
+                Step();
+            }
+
+            this.leftBoard.LeftSet(this);
         }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Move(Vector2Int.left);
-        } else if (Input.GetKeyDown(KeyCode.D))
-        {
-            Move(Vector2Int.right);
-        }
-
-        if(Input.GetKeyDown(KeyCode.S))
-        {
-            Move(Vector2Int.down);
-        }
-
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            LeftHardDrop();
-        }
-
-        if(Time.time >= this.stepTime)
-        {
-            Step();
-        }
-
-        this.leftBoard.LeftSet(this);
     }
 
     private void Step()
@@ -87,6 +103,7 @@ public class LeftPiece : MonoBehaviour
         this.leftBoard.LeftSet(this);
         this.leftBoard.ClearLeftLines();
         this.leftBoard.LeftSpawnPiece();
+        leftBoard.totalScore += 10;
     }
 
     private void LeftHardDrop()
@@ -193,6 +210,14 @@ public class LeftPiece : MonoBehaviour
         } else
         {
             return min + (input - min) % (max - min);
+        }
+    }
+
+    public void Pause()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            isPaused = true;
         }
     }
 }

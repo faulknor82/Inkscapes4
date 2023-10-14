@@ -12,6 +12,10 @@ public class LeftBoard : MonoBehaviour
     public GameObject leftBoardPanel;
 
     public bool IsLeftBoardGameOver = false;
+    public int IsLeftBoardGameOver2 = 0;
+
+    public int totalScore;
+    public int leftCount;
 
     public RectInt Bounds
     {
@@ -24,6 +28,7 @@ public class LeftBoard : MonoBehaviour
 
     private void Awake()
     {
+        IsLeftBoardGameOver = false;
         this.tilemap = GetComponentInChildren<Tilemap>();
         this.leftActivePiece = GetComponentInChildren<LeftPiece>();
         for(int i = 0; i < this.tetrominoes.Length; i++)
@@ -37,14 +42,6 @@ public class LeftBoard : MonoBehaviour
         LeftSpawnPiece();
     }
 
-    private void GameOver()
-    {
-        this.tilemap.ClearAllTiles();
-        leftBoardPanel.SetActive(true);
-
-        IsLeftBoardGameOver = true;
-    }
-
     public void LeftSpawnPiece()
     {
         int random = Random.Range(0, this.tetrominoes.Length);
@@ -53,9 +50,6 @@ public class LeftBoard : MonoBehaviour
         if (!IsLeftBoardGameOver)
         {
             this.leftActivePiece.LeftInitialize(this, spawnPosition, data);
-        } else
-        {
-            Destroy(leftActivePiece);
         }
 
         if (IsValidPosition(this.leftActivePiece, this.spawnPosition))
@@ -65,6 +59,15 @@ public class LeftBoard : MonoBehaviour
         {
             GameOver();
         }
+    }
+
+    private void GameOver()
+    {
+        this.tilemap.ClearAllTiles();
+        leftBoardPanel.SetActive(true);
+
+        IsLeftBoardGameOver = true;
+        IsLeftBoardGameOver2 = 1;
     }
 
     public void LeftSet(LeftPiece leftPiece)
@@ -114,7 +117,21 @@ public class LeftBoard : MonoBehaviour
         {
             if(IsLineFull(row))
             {
+                leftCount++;
                 LineClear(row);
+                if(leftCount == 1)
+                {
+                    totalScore += 25;
+                } else if(leftCount == 2)
+                {
+                    totalScore += 75 - 25;
+                } else if(leftCount == 3)
+                {
+                    totalScore += 225 - 75 - 25;
+                } else if(leftCount > 3)
+                {
+                    totalScore += 775 - 225 - 75 - 25;
+                }
             } else
             {
                 row++;
