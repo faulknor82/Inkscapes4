@@ -131,21 +131,25 @@ public class RightBoard : MonoBehaviour
                 if (rightCount == 1)
                 {
                     leftBoard.totalScore += 25;
+                    leftBoard.thisLevelScore += 25;
                     oneLineClearAudio.Play();
                 }
                 else if (rightCount == 2)
                 {
                     leftBoard.totalScore += 75 - 25;
+                    leftBoard.thisLevelScore += 75 - 25;
                     twoLinesClearAudio.Play();
                 }
                 else if (rightCount == 3)
                 {
                     leftBoard.totalScore += 225 - 75 - 25;
+                    leftBoard.thisLevelScore += 225 - 75 - 25;
                     threeLinesClearAudio.Play();
                 }
                 else if (rightCount > 3)
                 {
                     leftBoard.totalScore += 775 - 225 - 75 - 25;
+                    leftBoard.thisLevelScore += 775 - 225 - 75 - 25;
                     fourLinesClearAudio.Play();
                 }
             }

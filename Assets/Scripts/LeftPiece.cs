@@ -9,8 +9,8 @@ public class LeftPiece : MonoBehaviour
     public Vector3Int leftPosition { get; private set; }
     public int leftRotationIndex { get; private set; }
 
-    public float stepDelay = 1f;
-    public float lockDelay = 0.5f;
+    public float stepDelay { get; private set; }
+    public float lockDelay { get; private set; }
 
     private float stepTime;
     private float lockTime;
@@ -23,8 +23,15 @@ public class LeftPiece : MonoBehaviour
 
     public AudioSource pieceAtBottom;
 
+    private SceneMan sceneMan;
+    public GameObject sceneMana;
+
     private void Start()
     {
+        sceneMan = sceneMana.GetComponent<SceneMan>();
+        stepDelay = 1.2f;
+        lockDelay = 0.5f;
+        stepDelay = stepDelay - (.06f * sceneMan.nextScene);
         leftBoard = leftBoard2.GetComponent<LeftBoard>();
     }
 
@@ -108,7 +115,9 @@ public class LeftPiece : MonoBehaviour
         this.leftBoard.ClearLeftLines();
         this.leftBoard.LeftSpawnPiece();
         leftBoard.totalScore += 10;
+        leftBoard.thisLevelScore += 10;
         pieceAtBottom.Play();
+        pieceAtBottom.Stop();
     }
 
     private void LeftHardDrop()

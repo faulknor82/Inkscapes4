@@ -1,5 +1,7 @@
 using UnityEngine;
+using System.Collections;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
@@ -9,9 +11,16 @@ public class GameOver : MonoBehaviour
     public GameObject leftBoard2;
     public GameObject rightBoard2;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI thisLevelScoreText;
+    public TextMeshProUGUI goalText;
+    private SceneMan sceneMan;
+    public GameObject sceneMana;
+    public int winCondition;
+    public GameObject beginNextLevelButton;
 
     private void Start()
     {
+        sceneMan = sceneMana.GetComponent<SceneMan>();
         leftBoard = leftBoard2.GetComponent<LeftBoard>();
         rightBoard = rightBoard2.GetComponent<RightBoard>();
     }
@@ -19,14 +28,40 @@ public class GameOver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(leftBoard.thisLevelScore >= winCondition)
+        {
+            PlayerPrefs.SetInt("Total Score", leftBoard.totalScore);
+            // You Win
+            beginNextLevelButton.SetActive(true);
+        }
+
         if(leftBoard.IsLeftBoardGameOver2 + rightBoard.IsRightBoardGameOver2 == 2)
         {
             // Both Boards have lost - Game is over
             gameOverPanel.SetActive(true);
             leftBoard.leftBoardPanel.SetActive(false);
             rightBoard.rightBoardPanel.SetActive(false);
+            // leftBoard.IsLeftBoardGameOver2 = 0;
+            // rightBoard.IsRightBoardGameOver2 = 0;
+            PlayerPrefs.DeleteAll();
         }
 
+        Debug.Log(leftBoard.IsLeftBoardGameOver2);
+        Debug.Log(rightBoard.IsRightBoardGameOver2);
+
         scoreText.text = leftBoard.totalScore.ToString();
+        thisLevelScoreText.text = leftBoard.thisLevelScore.ToString();
+        goalText.text = "Goal: " + winCondition.ToString();
+    }
+
+    IEnumerator sceneTransition()
+    {
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene(sceneMan.nextScene);
+    }
+
+    public void BeginNextLevel()
+    {
+        StartCoroutine(sceneTransition());
     }
 }

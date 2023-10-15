@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
 
 public class LeftBoard : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class LeftBoard : MonoBehaviour
     public int totalScore;
     public int leftCount;
 
+    public int thisLevelScore;
+
     public AudioSource oneLineClearAudio;
     public AudioSource twoLinesClearAudio;
     public AudioSource threeLinesClearAudio;
@@ -32,6 +35,11 @@ public class LeftBoard : MonoBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
     private void Awake()
     {
         IsLeftBoardGameOver = false;
@@ -41,6 +49,20 @@ public class LeftBoard : MonoBehaviour
         {
             this.tetrominoes[i].Initialize();
         }
+    }
+
+    // called first
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    // called second
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("OnSceneLoaded: " + scene.name);
+        Debug.Log(mode);
+        totalScore = PlayerPrefs.GetInt("Total Score");
     }
 
     private void Start()
@@ -129,18 +151,22 @@ public class LeftBoard : MonoBehaviour
                 if(leftCount == 1)
                 {
                     totalScore += 25;
+                    thisLevelScore += 25;
                     oneLineClearAudio.Play();
                 } else if(leftCount == 2)
                 {
                     totalScore += 75 - 25;
+                    thisLevelScore += 75 - 25;
                     twoLinesClearAudio.Play();
                 } else if(leftCount == 3)
                 {
                     totalScore += 225 - 75 - 25;
+                    thisLevelScore += 225 - 75 - 25;
                     threeLinesClearAudio.Play();
                 } else if(leftCount > 3)
                 {
                     totalScore += 775 - 225 - 75 - 25;
+                    thisLevelScore += 775 - 225 - 75 - 25;
                     fourLinesClearAudio.Play();
                 }
             } else

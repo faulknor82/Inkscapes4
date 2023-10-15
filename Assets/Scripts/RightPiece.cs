@@ -8,8 +8,8 @@ public class RightPiece : MonoBehaviour
     public Vector3Int rightPosition { get; private set; }
     public int rightRotationIndex { get; private set; }
 
-    public float stepDelay = 1f;
-    public float lockDelay = 0.5f;
+    public float stepDelay { get; private set; }
+    public float lockDelay { get; private set; }
 
     private float stepTime;
     private float lockTime;
@@ -24,9 +24,17 @@ public class RightPiece : MonoBehaviour
 
     public AudioSource pieceAtBottom;
 
+    private SceneMan sceneMan;
+    public GameObject sceneMana;
+
     private void Start()
     {
+        sceneMan = sceneMana.GetComponent<SceneMan>();
+        stepDelay = 1f;
+        lockDelay = 0.5f;
+        stepDelay = stepDelay - (.03f * sceneMan.nextScene);
         leftBoard = leftBoard2.GetComponent<LeftBoard>();
+        Debug.Log("Step Delay: " + stepDelay);
     }
     public void RightInitialize(RightBoard rightBoard, Vector3Int rightPosition, TetrominoData data)
     {
@@ -109,8 +117,10 @@ public class RightPiece : MonoBehaviour
         this.rightBoard.RightSpawnPiece();
 
         leftBoard.totalScore += 10;
+        leftBoard.thisLevelScore += 10;
 
         pieceAtBottom.Play();
+        pieceAtBottom.Stop();
     }
 
     private void RightHardDrop()
