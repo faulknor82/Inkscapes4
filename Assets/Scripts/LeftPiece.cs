@@ -31,7 +31,7 @@ public class LeftPiece : MonoBehaviour
         sceneMan = sceneMana.GetComponent<SceneMan>();
         stepDelay = 1.2f;
         lockDelay = 0.5f;
-        stepDelay = stepDelay - (.06f * sceneMan.nextScene);
+        stepDelay = stepDelay - (.04f * sceneMan.nextScene);
         leftBoard = leftBoard2.GetComponent<LeftBoard>();
     }
 

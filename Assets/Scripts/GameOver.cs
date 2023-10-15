@@ -13,10 +13,12 @@ public class GameOver : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI thisLevelScoreText;
     public TextMeshProUGUI goalText;
+    public TextMeshProUGUI levelText;
     private SceneMan sceneMan;
     public GameObject sceneMana;
     public int winCondition;
     public GameObject beginNextLevelButton;
+    // public int scoreOnRetry;
 
     private void Start()
     {
@@ -43,25 +45,37 @@ public class GameOver : MonoBehaviour
             rightBoard.rightBoardPanel.SetActive(false);
             // leftBoard.IsLeftBoardGameOver2 = 0;
             // rightBoard.IsRightBoardGameOver2 = 0;
-            PlayerPrefs.DeleteAll();
+            // PlayerPrefs.DeleteAll();
         }
 
         Debug.Log(leftBoard.IsLeftBoardGameOver2);
         Debug.Log(rightBoard.IsRightBoardGameOver2);
 
-        scoreText.text = leftBoard.totalScore.ToString();
-        thisLevelScoreText.text = leftBoard.thisLevelScore.ToString();
-        goalText.text = "Goal: " + winCondition.ToString();
+        scoreText.text = leftBoard.totalScore.ToString("n0");
+        thisLevelScoreText.text = leftBoard.thisLevelScore.ToString("n0");
+        goalText.text = "Goal\n" + winCondition.ToString("n0");
+        levelText.text = "Level " + sceneMan.sceneIndex;
     }
 
     IEnumerator sceneTransition()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         SceneManager.LoadScene(sceneMan.nextScene);
+    }
+
+    IEnumerator retryScene()
+    {
+        yield return new WaitForSeconds(0.2f);
+        SceneManager.LoadScene(sceneMan.sceneIndex);
     }
 
     public void BeginNextLevel()
     {
         StartCoroutine(sceneTransition());
+    }
+
+    public void Retry()
+    {
+        StartCoroutine(retryScene());
     }
 }

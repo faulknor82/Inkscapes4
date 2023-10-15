@@ -4614,7 +4614,7 @@ MonoBehaviour:
   goalText: {fileID: 599764656}
   levelText: {fileID: 1375174112}
   sceneMana: {fileID: 1138309351}
-  winCondition: 1940
+  winCondition: 1695280
   beginNextLevelButton: {fileID: 1474071381}
 --- !u!4 &1599945846
 Transform:
