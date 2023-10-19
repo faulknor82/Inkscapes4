@@ -3682,6 +3682,7 @@ MonoBehaviour:
   leftPieceMoving: {fileID: 1885713412}
   pieceAtBottom: {fileID: 1354884210}
   sceneMana: {fileID: 1138309351}
+  gameOver2: {fileID: 1599945844}
 --- !u!1 &1354884208
 GameObject:
   m_ObjectHideFlags: 0
@@ -6408,6 +6409,7 @@ MonoBehaviour:
   rightPieceMoving: {fileID: 960394434}
   pieceAtBottom: {fileID: 1354884210}
   sceneMana: {fileID: 1138309351}
+  gameOver2: {fileID: 1599945844}
 --- !u!1 &2043259826
 GameObject:
   m_ObjectHideFlags: 0

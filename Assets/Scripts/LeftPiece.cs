@@ -25,10 +25,13 @@ public class LeftPiece : MonoBehaviour
 
     private SceneMan sceneMan;
     public GameObject sceneMana;
+    private GameOver gameOver;
+    public GameObject gameOver2;
 
     private void Start()
     {
         sceneMan = sceneMana.GetComponent<SceneMan>();
+        gameOver = gameOver2.GetComponent<GameOver>();
         stepDelay = 1.2f;
         lockDelay = 0.5f;
         stepDelay = stepDelay - (.04f * sceneMan.nextScene);
@@ -86,12 +89,20 @@ public class LeftPiece : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                LeftHardDrop();
+                if(!leftBoard.IsLeftBoardGameOver)
+                {
+                    LeftHardDrop();
+                }
             }
 
             if (Time.time >= this.stepTime)
             {
-                Step();
+                if (!leftBoard.IsLeftBoardGameOver && leftBoard.thisLevelScore < gameOver.winCondition)
+                {
+                    Step();
+                    Debug.Log("This Level Score: " + leftBoard.thisLevelScore);
+                    Debug.Log("Win Condition: " + gameOver.winCondition);
+                }
             }
 
             this.leftBoard.LeftSet(this);

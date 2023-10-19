@@ -27,9 +27,13 @@ public class RightPiece : MonoBehaviour
     private SceneMan sceneMan;
     public GameObject sceneMana;
 
+    private GameOver gameOver;
+    public GameObject gameOver2;
+
     private void Start()
     {
         sceneMan = sceneMana.GetComponent<SceneMan>();
+        gameOver = gameOver2.GetComponent<GameOver>();
         stepDelay = 1f;
         lockDelay = 0.5f;
         stepDelay = stepDelay - (.03f * sceneMan.nextScene);
@@ -87,12 +91,18 @@ public class RightPiece : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.RightShift))
             {
-                RightHardDrop();
+                if (!rightBoard.IsRightBoardGameOver)
+                {
+                    RightHardDrop();
+                }
             }
 
             if (Time.time >= this.stepTime)
             {
-                Step();
+                if (!rightBoard.IsRightBoardGameOver && leftBoard.thisLevelScore < gameOver.winCondition)
+                {
+                    Step();
+                }
             }
 
             this.rightBoard.RightSet(this);
